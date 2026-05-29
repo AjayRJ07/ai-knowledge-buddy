@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Knowledge Buddy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">B</div>
+      <div>
+        <div class="logo-name">Buddy</div>
+        <div class="logo-sub">Data Science AI</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-tab="chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chat
+      </button>
+      <button class="nav-item" data-tab="quiz">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Quiz
+        <span class="nav-badge">{{ quiz_count }}</span>
+      </button>
+      <button class="nav-item" data-tab="lessons">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Lessons
+        <span class="nav-badge">{{ lessons|length }}</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="model-pill">gemini-2.0-flash</div>
+      <div class="footer-note">Free tier · No card needed</div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- ── CHAT ─────────────────────────────────────── -->
+    <section class="tab-panel active" id="tab-chat">
+      <div class="panel-header">
+        <h1>Ask Buddy</h1>
+        <p>Your AI & Data Science knowledge companion</p>
+      </div>
+
+      <div class="chips-row" id="chips">
+        <button class="chip" onclick="sendChip(this)">What is the difference between AI, ML, and Deep Learning?</button>
+        <button class="chip" onclick="sendChip(this)">How does a transformer model work?</button>
+        <button class="chip" onclick="sendChip(this)">What is RAG and why does it matter?</button>
+        <button class="chip" onclick="sendChip(this)">Explain overfitting in simple terms</button>
+        <button class="chip" onclick="sendChip(this)">Best Python libraries for a data scientist?</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="message buddy">
+          <div class="message-avatar">B</div>
+          <div class="message-body">
+            Hi! I'm Buddy 👋 Ask me anything about AI and Data Science — from Python and ML algorithms to LLMs and MLOps. What would you like to learn today?
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <textarea id="chatInput" placeholder="Ask anything about AI & Data Science..." rows="1"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
+          oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendChat()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ── QUIZ ─────────────────────────────────────── -->
+    <section class="tab-panel" id="tab-quiz">
+      <div class="panel-header">
+        <h1>Knowledge Quiz</h1>
+        <p>Test your AI & Data Science fundamentals</p>
+      </div>
+      <div id="quizContainer"></div>
+    </section>
+
+    <!-- ── LESSONS ───────────────────────────────────── -->
+    <section class="tab-panel" id="tab-lessons">
+      <div class="panel-header">
+        <h1>Lessons</h1>
+        <p>Structured curriculum with Python code</p>
+      </div>
+      <div class="lessons-layout">
+        <div class="lessons-list" id="lessonsList">
+          {% for lesson in lessons %}
+          <button class="lesson-item {% if loop.first %}active{% endif %}" onclick="showLesson({{ loop.index0 }}, this)">
+            <div class="lesson-num">{{ '%02d'|format(loop.index) }}</div>
+            <div>
+              <div class="lesson-item-title">{{ lesson.title }}</div>
+              <div class="lesson-item-sub">{{ lesson.subtitle }}</div>
+            </div>
+          </button>
+          {% endfor %}
+        </div>
+        <div class="lesson-detail" id="lessonDetail">
+          <div class="lesson-placeholder">← Select a lesson to begin</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
