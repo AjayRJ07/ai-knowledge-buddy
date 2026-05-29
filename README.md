@@ -11,7 +11,7 @@ pip install -r requirements.txt
 ```
 
 ### 2. Create your `.env` file
-Rename `.env.example` to `.env` and paste your key:
+paste your key:
 ```
 GEMINI_API_KEY=AIzaSy...your-key-here...
 ```
@@ -40,19 +40,3 @@ ai-buddy-flask/
 ├── .env.example        ← Copy to .env and add your key
 └── README.md
 ```
-
----
-
-## 📤 Push to GitHub
-
-```cmd
-git init
-git add .
-git commit -m "AI Knowledge Buddy - Flask Web App"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/ai-knowledge-buddy-flask.git
-git push -u origin main
-```
-
-## 📄 License
-MIT
